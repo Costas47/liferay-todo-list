@@ -1,0 +1,15 @@
+dependencies {
+	compileOnly group: "com.liferay", name: "com.liferay.petra.lang"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.string"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.sql.dsl.api"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	compileOnly group: "org.osgi", name: "org.osgi.annotation.versioning"
+	compileOnly group: "org.osgi", name: "org.osgi.core"
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+}
+
+liferay {
+    liferayHome = "C:/liferay/liferay-portal-7.3.2/bundles"
+    //liferayHome = "../../bundles/osgi/modules"
+    deployDir = file("${liferayHome}/deploy")
+}

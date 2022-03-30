@@ -1,0 +1,128 @@
+<c:choose>
+	<c:when test='<%= displayStyle.equals("descriptive") %>'>
+		<liferay-ui:search-container-column-user
+			showDetails="<%= false %>"
+			userId="<%= task.getUserId() %>"
+		/>
+
+		<liferay-ui:search-container-column-text
+			colspan="<%= 2 %>"
+		>
+			<h2 class="h5">
+				<aui:a href="<%= rowURL.toString() %>">
+					<%= task.getTitle() %>
+				</aui:a>
+			</h2>
+
+			<%
+			Date dueDate = task.getDueDate();
+
+			String dueDateDescription = LanguageUtil.getTimeDescription(request, dueDate.getTime() - System.currentTimeMillis(), true);
+			%>
+
+			<span class="text-default">
+				<liferay-ui:message arguments="<%= new String[] {dueDateDescription} %>" key="due-in-x" />
+			</span>
+
+			<%
+			Date modifiedDate = task.getModifiedDate();
+
+			String modifiedDateDescription = LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - modifiedDate.getTime(), true);
+			%>
+
+			<span class="text-default">
+				<liferay-ui:message arguments="<%= new String[] {task.getUserName(), modifiedDateDescription} %>" key="x-modified-x-ago" />
+			</span>
+			<span class="text-default">
+				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= 0 %>" />
+			</span>
+		</liferay-ui:search-container-column-text>
+
+		<liferay-ui:search-container-column-jsp
+			path="/task_action.jsp"
+		/>
+	</c:when>
+	<c:when test='<%= displayStyle.equals("icon") %>'>
+
+		<%
+		row.setCssClass("entry-card lfr-asset-item");
+		%>
+
+		<liferay-ui:search-container-column-text>
+			<liferay-frontend:icon-vertical-card
+				actionJsp="/task_action.jsp"
+				actionJspServletContext="<%= application %>"
+				icon="check-circle"
+				resultRow="<%= row %>"
+				rowChecker="<%= new EmptyOnClickRowChecker(renderResponse) %>"
+				title="<%= task.getTitle() %>"
+				url="<%= (rowURL != null) ? rowURL.toString() : null %>"
+			>
+				<liferay-frontend:vertical-card-sticker-bottom>
+					<clay:sticker elementClasses='<%= "sticker-bottom-left sticker-circle sticker-primary sticker-user-icon " + LexiconUtil.getUserColorCssClass(user) %>' icon="user" />
+				</liferay-frontend:vertical-card-sticker-bottom>
+
+				<liferay-frontend:vertical-card-header>
+					<%= LanguageUtil.format(request, "due-in-x", new String[] {LanguageUtil.getTimeDescription(locale, task.getDueDate().getTime() - System.currentTimeMillis(), true), HtmlUtil.escape(task.getUserName())}, false) %>
+				</liferay-frontend:vertical-card-header>
+
+				<liferay-frontend:vertical-card-footer>
+					<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= task.getStatus() %>" />
+				</liferay-frontend:vertical-card-footer>
+			</liferay-frontend:icon-vertical-card>
+
+			<%
+
+			// TODO: use clay:vertical-card
+
+			%>
+
+			<%--
+			<clay:vertical-card
+				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), rowURL.toString(), permissionChecker, resourceBundle) %>"
+			/>
+			--%>
+
+		</liferay-ui:search-container-column-text>
+	</c:when>
+	<c:otherwise>
+		<liferay-ui:search-container-column-text
+			cssClass="table-cell-expand table-cell-minw-150 table-title"
+			href="<%= rowURL.toString() %>"
+			name="title"
+			orderable="<%= false %>"
+			value="<%= task.getTitle() %>"
+		/>
+
+		<liferay-ui:search-container-column-date
+			cssClass="table-cell-expand-smallest table-cell-ws-nowrap"
+			name="due-date"
+			orderable="<%= false %>"
+			property="dueDate"
+		/>
+
+		<liferay-ui:search-container-column-text
+			cssClass="table-cell-expand-smallest table-cell-minw-150"
+			name="author"
+			orderable="<%= false %>"
+			property="userName"
+		/>
+
+		<liferay-ui:search-container-column-date
+			cssClass="table-cell-expand-smallest table-cell-ws-nowrap"
+			name="create-date"
+			orderable="<%= false %>"
+			property="createDate"
+		/>
+
+		<%--
+		<liferay-ui:search-container-column-status
+			name="status"
+		/>
+		--%>
+
+		<liferay-ui:search-container-column-jsp
+			path="/task_action.jsp"
+		/>
+	</c:otherwise>
+</c:choose>

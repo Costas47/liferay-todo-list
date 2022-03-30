@@ -1,0 +1,5 @@
+Bundle-Name: liferay-todo-list-web
+Bundle-SymbolicName: com.crikkou.liferay.todo.list.web
+Bundle-Version: 1.0.0
+Export-Package: com.crikkou.liferay.todo.list.portlet.constants
+Web-ContextPath: /liferay-todo-list-web
